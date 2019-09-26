@@ -75,7 +75,7 @@ function buscarMedicos(regex) {
     return new Promise((resolve, reject) => {
         Medico.find({ nombre: regex })
             .populate('usuario', 'nombre email')
-            .populate('hopital')
+            .populate('hospital')
             .exec((err, medicos) => {
                 if (err) {
                     reject('Error al cargar medicos', err);

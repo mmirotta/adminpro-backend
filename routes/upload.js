@@ -107,7 +107,7 @@ function subirPorTipo(tipo, id, nombreArchivo, res) {
                         });
                     }
 
-                    usuarioActualizado = '';
+                    usuarioActualizado.password = '';
                     return res.status(200).json({
                         ok: true,
                         mensaje: 'Imagen de usuario actualizada',
