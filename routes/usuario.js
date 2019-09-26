@@ -43,7 +43,7 @@ app.get('/', (req, res, next) => {
         });
 });
 
-app.post('/', mdAuth.verificaToken, (req, res) => {
+app.post('/', (req, res) => {
 
     var body = req.body;
 
