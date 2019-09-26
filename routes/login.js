@@ -44,6 +44,62 @@ app.post('/google', async(req, res) => {
         });
     });
 
+    Usuario.findOne({ email: googleUser.email }, (err, usuarioDB) => {
+        if (err) {
+            return res.status(500).json({
+                ok: false,
+                mensaje: 'Error al buscar usuario',
+                errors: err
+            });
+        }
+
+        if (usuarioDB) {
+            if (usuarioDB.google === false) {
+                return res.status(400).json({
+                    ok: false,
+                    mensaje: 'Debe usar su autenticación normal'
+                });
+            } else {
+                usuarioDB.password = '';
+                var token = jwt.sign({ usuario: usuarioDB }, SEED, { expiresIn: 14400 })
+
+                res.status(200).json({
+                    ok: true,
+                    usuario: usuarioDB,
+                    token: token,
+                    id: usuarioDB._id
+                });
+            }
+        } else {
+            var usuario = new Usuario();
+
+            usuario.nombre = googleUser.nombre;
+            usuario.email = googleUser.email;
+            usuario.img = googleUser.img;
+            usuario.google = true;
+            usuario.password = ':)';
+
+            usuario.save((err, usuarioDB) => {
+                if (err) {
+                    return res.status(500).json({
+                        ok: false,
+                        mensaje: 'Error al buscar usuario',
+                        errors: err
+                    });
+                }
+
+                var token = jwt.sign({ usuario: usuarioDB }, SEED, { expiresIn: 14400 })
+
+                res.status(200).json({
+                    ok: true,
+                    usuario: usuarioDB,
+                    token: token,
+                    id: usuarioDB._id
+                });
+            });
+        }
+    });
+
     return res.status(200).json({
         ok: true,
         googleUser: googleUser
@@ -84,7 +140,7 @@ app.post('/', (req, res) => {
 
         //CREAR TOKEN
         usuarioDB.password = '';
-        var token = jwt.sign({ usaurio: usuarioDB }, SEED, { expiresIn: 14400 })
+        var token = jwt.sign({ usuario: usuarioDB }, SEED, { expiresIn: 14400 })
 
         res.status(200).json({
             ok: true,
