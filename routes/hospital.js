@@ -5,6 +5,7 @@ var bcrypt = require('bcryptjs');
 // Inicializar variables
 var app = express();
 var Hospital = require('../models/hospital');
+var mdAuth = require('../middlewares/auth');
 
 app.get('/', (req, res, next) => {
     var desde = req.query.desde || 0;
