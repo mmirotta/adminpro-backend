@@ -9,22 +9,19 @@ const fs = require('fs');
 app.get('/:tipo/:img', (req, res, next) => {
 
     var tipo = req.params.tipo;
-    var img = req.params.tipo;
+    var img = req.params.img;
 
-    var pathImage = path.resolve(__dirname, `../uploads/${ tipo }/${ img }`);
+    var path = `./uploads/${ tipo }/${ img }`;
 
-    if (fs.existsSync(pathImage)) {
-        res.sendFile(pathImage);
-    } else {
-        var pathNoImage = path.resolve(__dirname, '../assets/no-img.jpg');
-        res.sendFile(pathNoImage);
-    }
+    fs.exists(path, existe => {
 
-    res.status(200).json({
-        ok: true,
-        mensaje: 'Peticion realizada correctamente'
+        if (!existe) {
+            path = './assets/no-img.jpg';
+        }
+
+        res.sendfile(path);
+
     });
-
 });
 
 module.exports = app;
