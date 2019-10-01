@@ -21,3 +21,42 @@ exports.verificaToken = function(req, res, next) {
         next();
     });
 };
+
+// ========
+// USER ADMIN
+// ========
+exports.verificaADMIN_ROLE = function(req, res, next) {
+
+    var usuario = req.usuario;
+
+    if (usuario.role === 'ADMIN_ROLE') {
+        next();
+        return;
+    } else {
+        return res.status(401).json({
+            ok: false,
+            mensaje: 'Token no valido',
+            errors: err
+        });
+    }
+};
+
+// ========
+// USER ADMIN
+// ========
+exports.verificaADMIN_ROLE_o_MISMO_USER = function(req, res, next) {
+
+    var usuario = req.usuario;
+    var id = req.params.id;
+
+    if (usuario.role === 'ADMIN_ROLE' || usuario.id === id) {
+        next();
+        return;
+    } else {
+        return res.status(401).json({
+            ok: false,
+            mensaje: 'Token no valido',
+            errors: err
+        });
+    }
+};

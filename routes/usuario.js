@@ -71,7 +71,7 @@ app.post('/', (req, res) => {
     })
 });
 
-app.put('/:id', mdAuth.verificaToken, (req, res) => {
+app.put('/:id', [mdAuth.verificaToken, mdAuth.verificaADMIN_ROLE_o_MISMO_USER], (req, res) => {
     var id = req.params.id;
     var body = req.body;
 
@@ -112,7 +112,7 @@ app.put('/:id', mdAuth.verificaToken, (req, res) => {
     })
 });
 
-app.delete('/:id', mdAuth.verificaToken, (req, res) => {
+app.delete('/:id', [mdAuth.verificaToken, mdAuth.verificaADMIN_ROLE], (req, res) => {
     var id = req.params.id;
 
     Usuario.findByIdAndRemove(id, (err, usuarioBorrado) => {
